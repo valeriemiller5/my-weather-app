@@ -4,7 +4,7 @@ $(document).ready(function () {
     // Using Firebase to store the cities 
     const firebaseConfig = {
         // The api key will be removed for deployment
-    
+        
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -30,11 +30,9 @@ $(document).ready(function () {
         let postData = {
             cities: data
         }
-
         let newPostKey = database.ref().child('cities').push().key;
         let updateCities = {};
         updateCities[newPostKey] = postData;
-
         return database.ref().update(updateCities);
     }
 
@@ -64,8 +62,8 @@ $(document).ready(function () {
             $("#icon").attr("src", iconURL);
             $("#date").html(recordedDate);
             $("#desc").html(data.weather[0].description)
-            $("#temp").html(data.main.temp)
-            $("#humid").html(data.main.humidity)
+            $("#temp").html(Math.round(data.main.temp) + "&#8457;")
+            $("#humid").html(data.main.humidity + "&#37;")
             $("#wind").html(data.wind.speed)
             $(".weatherData").show();
         });
@@ -73,6 +71,7 @@ $(document).ready(function () {
         //Retrieve 5 day forecast for selected city, dynamically render them to individual cards
         $.get(`http://api.openweathermap.org/data/2.5/forecast?q=${input}&appid=${apiKey}&units=imperial`, function (data) {
             // console.log(data)
+            $(".fiveDay").html("<h3 class='uk-card-title'>Five Day Forecast</h3>").append("<div class='uk-grid cards'></div>");
             for (var i = 0; i < 5; i++) {
                 const nextDays = new Date(date.setDate(date.getDate() + 1) + i);
                 const fiveDay = nextDays.toLocaleDateString();
@@ -111,7 +110,6 @@ $(document).ready(function () {
         } else {
             getWeather(city);
             $("form").trigger("reset");
-            window.location.reload();
         }
         writeCityData(city);
     });
