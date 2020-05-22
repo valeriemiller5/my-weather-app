@@ -1,6 +1,6 @@
 nav {
     margin-bottom: 0 !important;
-    background-color: lightslategray !important;
+    background-color: black !important;
 }
 
 .uk-alert-danger {
@@ -25,7 +25,9 @@ li {
 }
 
 .uk-width-1-5 {
-    padding-left: 15px;
-    width: 205px;
+    padding-left: 25px;
+    width: 200px;
+    height: 275px;
+    overflow: hidden;
     text-align: center;
 }

@@ -21,6 +21,7 @@ $(document).ready(function () {
             .once("child_added", function (snapshot) {
                 const lastEntry = snapshot.val().cities;
                 getWeather(lastEntry);
+                getFiveDay(lastEntry);
             });
     };
     openApp();
@@ -49,29 +50,35 @@ $(document).ready(function () {
         });
     };
 
-    //Function to call to the OpenWeatherMap API
+    //Function to call to the OpenWeatherMap API for current weather
     function getWeather(input) {
         const date = new Date(Date.now());
         const recordedDate = date.toLocaleDateString();
         //Retrieve current weather for selected city
         $.get(`http://api.openweathermap.org/data/2.5/weather?q=${input}&appid=${apiKey}&units=imperial`, function (data) {
-            // console.log(data)
+            console.log(data)
             const icon = data.weather[0].icon;
             const iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
             $("#name").html(data.name);
             $("#icon").attr("src", iconURL);
             $("#date").html(recordedDate);
-            $("#desc").html(data.weather[0].description)
             $("#temp").html(Math.round(data.main.temp) + "&#8457;")
             $("#humid").html(data.main.humidity + "&#37;")
             $("#wind").html(data.wind.speed)
-            $(".weatherData").show();
-        });
 
+            const lat = data.coord.lat
+            const lon = data.coord.lon
+            getUVindex(lat, lon)
+        });
+    };
+
+    //Function to call to the OpenWeatherMap API for 5 day forecast
+    function getFiveDay(input) {
+        const date = new Date(Date.now());
         //Retrieve 5 day forecast for selected city, dynamically render them to individual cards
         $.get(`http://api.openweathermap.org/data/2.5/forecast?q=${input}&appid=${apiKey}&units=imperial`, function (data) {
             // console.log(data)
-            $(".fiveDay").html("<h3 class='uk-card-title'>Five Day Forecast</h3>").append("<div class='uk-grid cards'></div>");
+            $(".fiveDay").html("<h6 class='uk-card-title'>Five Day Forecast</h6>").append("<div class='uk-grid cards'></div>");
             for (var i = 0; i < 5; i++) {
                 const nextDays = new Date(date.setDate(date.getDate() + 1) + i);
                 const fiveDay = nextDays.toLocaleDateString();
@@ -96,10 +103,30 @@ $(document).ready(function () {
         });
     }
 
+    //Function to call to the OpenWeatherMap API for current UV Index
+    function getUVindex(lat, lon) {
+        $.get(`http://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`, function (data) {
+            const uvIndex = data.value;
+            $("#uvindex").html(data.value);
+
+            const green = "background-image: linear-gradient(forestgreen, lawngreen); height: 110%";
+            const yellow = "background-image: linear-gradient(darkkhaki, lightgoldenrodyellow); height: 110%";
+            const red = "background-image: linear-gradient(firebrick, lightcoral); height: 110%";
+            if (uvIndex <= 2) {
+                $("html").attr("style", green)
+            } else if (uvIndex > 2 && uvIndex <= 7) {
+                $("html").attr("style", yellow)
+            } else {
+                $("html").attr("style", red)
+            }
+        });
+    }
+
     // Add functionality to dynamically rendere city buttons to also access OpenWeatherMap API
     $(document).on("click", ".cityBtn", function () {
         const cityBtn = $(this).val();
         getWeather(cityBtn);
+        getFiveDay(cityBtn);
     });
 
     //Handle submitting the city entered into the form, submit it to Open Weather Map API for weather information
@@ -109,6 +136,7 @@ $(document).ready(function () {
             return $(".uk-alert-danger").show();
         } else {
             getWeather(city);
+            getFiveDay(city);
             $("form").trigger("reset");
         }
         writeCityData(city);
