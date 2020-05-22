@@ -1,8 +1,7 @@
 # my-weather-app
 
 ## About this App
-> This is a basic weather app that calls to the OpenWeatherMap.org API for current weather conditions in the city input by the user, as well as that city's 5 day forecast.  The background color of the app changes depending on the UV index for that day: green for favorable, yellow for moderate, and red for severe.
-
+> This is a basic weather app that calls to the OpenWeatherMap.org API for current weather conditions in the city input by the user, as well as that city's 5 day forecast.  The background color of the app changes depending on the UV index for that day: green for favorable, yellow for moderate, and red for severe <br /> 
 This app was build using the OpenWeatherMap.org API, jQuery, UIkit for CSS styling, and Firebase. Note: the assignment called for students to use local storage; however, I chose to use Firebase instead since previous assignments used local storage. 
 
 ## Demo
@@ -11,7 +10,7 @@ This app was build using the OpenWeatherMap.org API, jQuery, UIkit for CSS styli
 
 ![My-Weather-App Demo Part 1](demo/my-weather-app-demo.gif)
 
-In the second demonstration, it is shown that the cities that were searched are being added to the database, which will then create a list of the cities in the database each time the browser is opened, and the information from the last city entered will be the default information displayed.
+> In the second demonstration, it is shown that the cities that were searched are being added to the database, which will then create a list of the cities in the database each time the browser is opened, and the information from the last city entered will be the default information displayed.
 <br />
 
 ![My-Weather-App Demo Part 2](demo/mwa-demo-part-2.gif)
